@@ -10,7 +10,10 @@ public class Vertex<T> {
 	// direct neighbors
 	private ArrayList<Vertex<T>> adjecencyList;
 
-	// well traversing through the graph, has this vertex been visited or not
+	// tracks the number of incoming edges for topological sorting
+	private int inDegree;
+
+	// while traversing through the graph, has this vertex been visited or not
 	private boolean visited;
 
 	/**
@@ -21,6 +24,8 @@ public class Vertex<T> {
 	public Vertex(T _data) {
 		this.setData(_data);
 		this.setVisited(false);
+		this.inDegree = 0;
+		this.adjecencyList = new ArrayList<Vertex<T>>();
 	}
 
 	/**
@@ -28,7 +33,6 @@ public class Vertex<T> {
 	 */
 	public void visit() {
 		this.setVisited(true);
-		// TODO: something happens when you visit
 	}
 
 	/**
@@ -53,15 +57,13 @@ public class Vertex<T> {
 	/**
 	 * setter method for the data of a vertex
 	 * 
-	 * @param _data the data to set
+	 * @param data the data to set
 	 */
-	public void setData(T _data) {
-		this.data = _data;
+	public void setData(T data) {
+		this.data = data;
 	}
 
 	/**
-	 * checks if a vertex has been visited or not
-	 * 
 	 * @return the visited
 	 */
 	public boolean isVisited() {
@@ -69,12 +71,42 @@ public class Vertex<T> {
 	}
 
 	/**
-	 * change the visited status of a vertex
-	 * 
-	 * @param _visited the visited to set
+	 * @param visited the visited to set
 	 */
-	public void setVisited(boolean _visited) {
-		this.visited = _visited;
+	public void setVisited(boolean visited) {
+		this.visited = visited;
 	}
 
+	/**
+	 * @return the inDegree
+	 */
+	public int getInDegree() {
+		return this.inDegree;
+	}
+
+	/**
+	 * @param inDegree the inDegree to set
+	 */
+	public void setInDegree(int inDegree) {
+		this.inDegree = inDegree;
+	}
+
+	/**
+	 * Increments the in-degree count
+	 */
+	public void incrementInDegree() {
+		++this.inDegree;
+	}
+
+	/**
+	 * Decrements the in-degree count
+	 */
+	public void decrementInDegree() {
+		++this.inDegree;
+	}
+
+	@Override
+	public String toString() {
+		return data.toString();
+	}
 }

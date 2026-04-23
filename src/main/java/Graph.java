@@ -9,141 +9,166 @@ public class Graph<T> {
 	private ArrayList<Vertex<T>> vertexList;
 	private ArrayList<Edge<T>> edgeList;
 
-	public Graph(ArrayList<Vertex<T>> _vertexList, ArrayList<Vertex<T>> _edgeList) {
-		this.setVertexList((ArrayList<Vertex<T>>) _vertexList.clone());
-		this.setEdgeList((ArrayList<Edge<T>>) _edgeList.clone());
-
+	public Graph(ArrayList<Vertex<T>> _vertexList, ArrayList<Edge<T>> _edgeList) {
+		this.vertexList = new ArrayList<Vertex<T>>(_vertexList);
+		this.edgeList = new ArrayList<Edge<T>>(_edgeList);
 	}
 
-	// add vertex/edge
 	public void addVertex(Vertex<T> toAdd) {
-		this.getVertexList().add(toAdd);
+		this.vertexList.add(toAdd);
 	}
 
 	public void addEdge(Edge<T> toAdd) {
-		this.getEdgeList().add(toAdd);
+		this.edgeList.add(toAdd);
 	}
 
-	// isEmpty
-	public boolean isEmpty() {
-		return (this.getVertexList().size() == 0);
+	public void addEdge(Vertex<T> start, Vertex<T> end) {
+		this.addEdge(start, end, true, 1);
 	}
 
-	// hasEdge (checks if there is a bridge between vertex A and B)
+	public void addEdge(Vertex<T> start, Vertex<T> end, boolean directed, int weight) {
+		this.addEdge(new Edge<T>(start, end, directed, weight));
+	}
+
 	/**
-	 * checks if there is an edge between A and B
+	 * Breadth First Search traversal
 	 * 
-	 * @param start start of the hypothetical edge
-	 * @param end   end of the hypothetical edge
-	 * @return true if an edge exists
-	 */
-	public boolean hasEdge(Vertex<T> start, Vertex<T> end) {
-		return (start.getAdjecencyList().contains(end));
-	}
-
-	/**
-	 * getter method for the number of vertices
-	 * 
-	 * @return number of vertices in the graph
-	 */
-	public int getNumVertices() {
-		return this.getVertexList().size();
-	}
-
-	/**
-	 * getter method for the number of vertices
-	 * 
-	 * @return number of edges in the graph
-	 */
-	public int getNumEdges() {
-		return this.getEdgeList().size();
-	}
-
-	/**
-	 * clear method to wipe the graph of all data
-	 */
-	public void clear() {
-		this.setEdgeList(null);
-		this.setVertexList(null);
-	}
-
-	/**
-	 * navigate through the graph in BFS order
-	 * 
-	 * @param start starting point of the navigation
+	 * @param start
 	 */
 	public void BFS(Vertex<T> start) {
+		// initialize all vertices to be not visited
+		for (Vertex<T> v : vertexList) {
+			v.setVisited(false);
+		}
+
 		Queue<Vertex<T>> vertexQueue = new LinkedList<Vertex<T>>();
-		ArrayList<Vertex<T>> BFSOrder = new ArrayList<Vertex<T>>();
-
-		// initialize the queue with our starting point
+		// 'process' the starting node
 		vertexQueue.add(start);
+		start.visit();
 
-		// when the queue is empty it means we reached every possible vertex from our
-		// starting point
 		while (!vertexQueue.isEmpty()) {
-			// add the vertex next to be dealt with to the order record
-			BFSOrder.add(vertexQueue.peek());
-			vertexQueue.peek().visit();
-			// start to process the vertex's neighbors
+			Vertex<T> current = vertexQueue.poll();
+			// let me see the result please :3
+			System.out.print(current.getData() + " ");
 
-			// for each element at the front of the queue,
-			// go through the adjacency list of that vertex
-			for (Vertex<T> v : vertexQueue.remove().getAdjecencyList()) {
-				if (v.isVisited()) {
-					continue;
+			for (Vertex<T> neighbor : current.getAdjecencyList()) {
+				if (!neighbor.isVisited()) {
+					neighbor.visit();
+					vertexQueue.add(neighbor);
 				}
-
-				// add each neighbor to the queue to be dealt with
-				vertexQueue.add(v);
 			}
 		}
 	}
 
 	/**
-	 * wraper method for navigating through the graph in DFS
+	 * Depth First Search traversal
 	 * 
-	 * @param start starting point of the navigation
+	 * @param start
 	 */
-	public void DFS(Vertex<T> start, Vertex<T> search) {
-		ArrayList<Vertex<T>> DFSOrder = new ArrayList<Vertex<T>>();
-		DFSOrder.add(start);
+	public void DFS(Vertex<T> start) {
+		for (Vertex<T> v : vertexList)
+			v.setVisited(false);
+		DFS_Helper(start);
+	}
 
+	private void DFS_Helper(Vertex<T> current) {
+		current.visit();
+		System.out.print(current.getData() + " ");
+
+		for (Vertex<T> neighbor : current.getAdjecencyList()) {
+			if (!neighbor.isVisited()) {
+				DFS_Helper(neighbor);
+			}
+		}
 	}
 
 	/**
-	 * getter method for the list of vertices in the graph
-	 * 
-	 * @return the vertexList
+	 * Generates an adjacency matrix with vertices in alphabetical order
 	 */
+	public int[][] getAdjacencyMatrix() {
+		int n = vertexList.size();
+		int[][] matrix = new int[n][n];
+
+		// Sort vertices alphabetically by their data string representation
+		vertexList.sort((v1, v2) -> v1.getData().toString().compareTo(v2.getData().toString()));
+
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				matrix[i][j] = hasEdge(vertexList.get(i), vertexList.get(j)) ? 1 : 0;
+			}
+
+		}
+		return matrix;
+	}
+
+	/**
+	 * checks if there is an edge between 2 vertices
+	 * 
+	 * @param start start of the edge
+	 * @param end   end of the edge
+	 * @return true if there is an edge between the 2 vertices
+	 */
+	private boolean hasEdge(Vertex<T> start, Vertex<T> end) {
+		return start.getAdjecencyList().contains(end);
+	}
+
+	/**
+	 * breadth first search for topological sort
+	 * 
+	 * @return the vertices as an ArrayList in the order that they were encountered
+	 */
+	public ArrayList<Vertex<T>> topologicalSort() {
+		ArrayList<Vertex<T>> result = new ArrayList<>();
+		Queue<Vertex<T>> queue = new LinkedList<>();
+
+		// alphabetical order for the start
+		this.vertexList.sort((v1, v2) -> v1.getData().toString().compareTo(v2.getData().toString()));
+
+		// Add all vertices with 0 in-degree to the queue
+		for (Vertex<T> v : this.vertexList) {
+			if (v.getInDegree() == 0) {
+				queue.add(v);
+			}
+		}
+
+		while (!queue.isEmpty()) {
+			Vertex<T> current = queue.poll();
+			result.add(current);
+
+			for (Vertex<T> neighbor : current.getAdjecencyList()) {
+				neighbor.decrementInDegree();
+				if (neighbor.getInDegree() == 0) {
+					queue.add(neighbor);
+				}
+			}
+		}
+		return result;
+	}
+
 	public ArrayList<Vertex<T>> getVertexList() {
 		return this.vertexList;
 	}
 
-	/**
-	 * setter method to initialize a graph's list of vertices
-	 * 
-	 * @param vertexList the vertexList to set
-	 */
-	public void setVertexList(ArrayList<Vertex<T>> vertexList) {
-		this.vertexList = vertexList;
-	}
-
-	/**
-	 * getter method for the list of edges in the graph
-	 * 
-	 * @return the edgeList
-	 */
 	public ArrayList<Edge<T>> getEdgeList() {
 		return this.edgeList;
 	}
 
-	/**
-	 * setter method to initialize a graph's list of edges
-	 * 
-	 * @param edgeList the edgeList to set
-	 */
 	public void setEdgeList(ArrayList<Edge<T>> edgeList) {
 		this.edgeList = edgeList;
+	}
+
+	/**
+	 * reset the graph by clearing the vertex and edge list
+	 */
+	public void clear() {
+		this.getVertexList().clear();
+		this.getEdgeList().clear();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+
+		return res.toString();
 	}
 }
