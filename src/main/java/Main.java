@@ -9,11 +9,11 @@ public class Main {
 
 		/*
 		 * V(StateGraph) = {Oregon, Alaska, Texas, Hawaii, Vermont, NewYork, California}
-		 * 
 		 * E(StateGraph) = {(Alaska, Oregon), (Hawaii, Alaska), (Hawaii, Texas), (Texas,
 		 * Hawaii), (Hawaii, California), (Hawaii, New York), (Texas, Vermont),
 		 * (Vermont, California), (Vermont, Alaska)}
 		 */
+
 		ArrayList<Vertex<String>> vertexList = new ArrayList<Vertex<String>>();
 		ArrayList<Edge<String>> edgeList = new ArrayList<Edge<String>>();
 		Graph<String> myGraphStr = new Graph<String>(vertexList, edgeList);
@@ -23,22 +23,29 @@ public class Main {
 		Graph<Integer> myGraphInt = new Graph<Integer>(vertexListInt, edgeListInt);
 
 		slideOneAndTwo(myGraphStr);
+		System.out.println();
 
 		slideThree(myGraphStr);
+		System.out.println();
 
 		slideFour(myGraphStr);
+		System.out.println();
 
 		slideFiveAndSix(myGraphInt);
+		System.out.println();
 
 		slideSeven(myGraphStr);
+		System.out.println();
 
 		slideEight(myGraphInt);
+		System.out.println();
 
 		slideNine(myGraphStr);
-
+		System.out.println();
 	}
 
 	public static <T> void slideOneAndTwo(Graph<String> myGraph) {
+		System.out.println("Slides One and Two");
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> Oregon = new Vertex<String>("Oregon");
@@ -68,14 +75,19 @@ public class Main {
 			myGraph.addEdge(Vermont, Alaska);
 		}
 
-		System.out.println("Slide One and Two");
 		System.out.println(myGraph.toString());
 
-		displayGraphMatrix(myGraph);
+		// Q3a
+		myGraph.displayAdjacencyMatrix();
+
+		// Q3b
+		myGraph.displayAdjacencyLists();
+
 		myGraph.clear();
 	}
 
 	public static <T> void slideThree(Graph<String> myGraph) {
+		System.out.println("Slide Three");
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> A = new Vertex<String>("A");
@@ -108,11 +120,18 @@ public class Main {
 
 			myGraph.addEdge(E, G, false, 7);
 		}
-		displayGraphMatrix(myGraph);
+		// setting up this problem was a waste of time because
+		// i wasn't able to figure which vertices came first when there was a tie
+		System.out.println("couldn't figure out how this assignment wanted this solved algorithmically");
 		myGraph.clear();
+
 	}
 
 	public static <T> void slideFour(Graph<String> myGraph) {
+		System.out.println("Slide Four");
+		// declare this one outside so i can call it in the method
+		Vertex<String> Atlanta = new Vertex<String>("Atlanta");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> Austin = new Vertex<String>("Austin");
@@ -121,7 +140,7 @@ public class Main {
 			Vertex<String> Denver = new Vertex<String>("Denver");
 			Vertex<String> Houston = new Vertex<String>("Houston");
 			Vertex<String> Washington = new Vertex<String>("Washington");
-			Vertex<String> Atlanta = new Vertex<String>("Atlanta");
+			// Vertex<String> Atlanta = new Vertex<String>("Atlanta");
 
 			myGraph.addVertex(Austin);
 			myGraph.addVertex(Chicago);
@@ -151,11 +170,20 @@ public class Main {
 			myGraph.addEdge(Atlanta, Houston, true, 800);
 			myGraph.addEdge(Atlanta, Washington, true, 600);
 		}
-		displayGraphMatrix(myGraph);
+
+		// Find the shortest distance from Atlanta to every other city
+		// Q5
+		myGraph.dijkstra(Atlanta);
+		// now we have the tree where Atlanta gets everywhere as fast as possible
+		myGraph.printShortestPaths(Atlanta);
+
 		myGraph.clear();
+
 	}
 
 	public static <T> void slideFiveAndSix(Graph<Integer> myGraph) {
+		System.out.println("Slides Five and Six");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<Integer> zero = new Vertex<Integer>(0);
@@ -189,11 +217,13 @@ public class Main {
 
 		// kruskal's algorithm
 
-		displayGraphMatrix(myGraph);
+		myGraph.displayAdjacencyMatrix();
 		myGraph.clear();
 	}
 
 	public static <T> void slideSeven(Graph<String> myGraph) {
+		System.out.println("Slide Seven");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> DesMoines = new Vertex<String>("Des Moines");
@@ -228,11 +258,13 @@ public class Main {
 		}
 		// need to use kruskal's algorithm starting from Minneapolis
 
-		displayGraphMatrix(myGraph);
+		myGraph.displayAdjacencyMatrix();
 		myGraph.clear();
 	}
 
 	public static <T> void slideEight(Graph<Integer> myGraph) {
+		System.out.println("Slide Eight");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<Integer> zero = new Vertex<Integer>(0);
@@ -286,11 +318,13 @@ public class Main {
 		 * the steps using arrays predCount, topologicalOrder and a queue
 		 */
 
-		displayGraphMatrix(myGraph);
+		myGraph.displayAdjacencyMatrix();
 		myGraph.clear();
 	}
 
 	public static <T> void slideNine(Graph<String> myGraph) {
+		System.out.println("Slide Nine");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> Start = new Vertex<String>("Start");
@@ -338,46 +372,7 @@ public class Main {
 		 * 10. List the nodes of the graph in a breadth first topological ordering.
 		 */
 
-		displayGraphMatrix(myGraph);
+		myGraph.displayAdjacencyMatrix();
 		myGraph.clear();
-	}
-
-	/**
-	 * Helper method in Main to display the adjacency matrix with fixed width
-	 * formatting
-	 */
-	public static <T> void displayGraphMatrix(Graph<T> graph) {
-		int[][] matrix = graph.getAdjacencyMatrix();
-		ArrayList<Vertex<T>> vertices = graph.getVertexList();
-		int n = vertices.size();
-
-		// Define a fixed width for columns
-		String format = "%-12s";
-
-		// 1. Print the top header labels
-		System.out.print(String.format(format, "")); // Corner gap
-		for (Vertex<T> v : vertices) {
-			System.out.print(String.format(format, v.getData()));
-		}
-		System.out.println();
-
-		// 2. Print a divider line
-		System.out.print(String.format(format, ""));
-		for (int i = 0; i < n; ++i) {
-			System.out.print(String.format(format, "---"));
-		}
-		System.out.println();
-
-		// 3. Print rows with side labels
-		for (int i = 0; i < n; i++) {
-			// Print the state name on the left (fixed width)
-			System.out.print(String.format("%-10s | ", vertices.get(i).getData()));
-
-			for (int j = 0; j < n; j++) {
-				// Print the number with the same fixed width
-				System.out.print(String.format(format, matrix[i][j]));
-			}
-			System.out.println();
-		}
 	}
 }

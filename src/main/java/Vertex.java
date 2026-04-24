@@ -3,7 +3,7 @@
 
 import java.util.ArrayList;
 
-public class Vertex<T> {
+public class Vertex<T> implements Comparable<Vertex<T>> {
 	// what does the vertex contain
 	private T data;
 
@@ -15,6 +15,10 @@ public class Vertex<T> {
 
 	// while traversing through the graph, has this vertex been visited or not
 	private boolean visited;
+
+	// fields needed for dijkstra's algorithm (boooooo)
+	private int distance = Integer.MAX_VALUE; // idk how else to do infinity
+	private Vertex<T> predecessor = null;
 
 	/**
 	 * basic constructor to initialize a vertex
@@ -43,6 +47,39 @@ public class Vertex<T> {
 	 */
 	public ArrayList<Vertex<T>> getAdjecencyList() {
 		return this.adjecencyList;
+	}
+
+	@Override
+	public int compareTo(Vertex<T> other) {
+		return Integer.compare(this.distance, other.distance);
+	}
+
+	/**
+	 * @return the distance
+	 */
+	public int getDistance() {
+		return distance;
+	}
+
+	/**
+	 * @param distance the distance to set
+	 */
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
+	/**
+	 * @return the predecessor
+	 */
+	public Vertex<T> getPredecessor() {
+		return this.predecessor;
+	}
+
+	/**
+	 * @param _predecessor the predecessor to set
+	 */
+	public void setPredecessor(Vertex<T> _predecessor) {
+		this.predecessor = _predecessor;
 	}
 
 	/**

@@ -58,6 +58,34 @@ public class Edge<T> {
 	}
 
 	/**
+	 * @return the first
+	 */
+	public Vertex<T> getFirst() {
+		return this.first;
+	}
+
+	/**
+	 * @param first the first to set
+	 */
+	public void setFirst(Vertex<T> first) {
+		this.first = first;
+	}
+
+	/**
+	 * @return the second
+	 */
+	public Vertex<T> getSecond() {
+		return this.second;
+	}
+
+	/**
+	 * @param second the second to set
+	 */
+	public void setSecond(Vertex<T> second) {
+		this.second = second;
+	}
+
+	/**
 	 * setter method for the weight of an edge
 	 * 
 	 * @param _weight
