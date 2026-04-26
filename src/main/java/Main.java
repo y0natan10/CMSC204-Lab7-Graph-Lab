@@ -323,6 +323,7 @@ public class Main {
 		 */
 		ArrayList<Vertex<String>> temp = new ArrayList<Vertex<String>>();
 		temp = (ArrayList<Vertex<String>>) myGraph.topologicalSort().clone();
+		System.out.print("Final Order: ");
 		for (int i = 0; i < temp.size(); ++i) {
 			System.out.print(temp.get(i).toString() + (i == temp.size() - 1 ? "" : ", "));
 		}
@@ -381,6 +382,7 @@ public class Main {
 
 		ArrayList<Vertex<String>> temp = new ArrayList<Vertex<String>>();
 		temp = (ArrayList<Vertex<String>>) myGraph.topologicalSort().clone();
+		System.out.print("Final Order: ");
 		for (int i = 0; i < temp.size(); ++i) {
 			System.out.print(temp.get(i).toString() + (i == temp.size() - 1 ? "" : ", "));
 		}
