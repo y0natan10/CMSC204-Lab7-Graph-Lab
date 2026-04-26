@@ -184,9 +184,11 @@ public class Main {
 	public static <T> void slideFiveAndSix(Graph<Integer> myGraph) {
 		System.out.println("Slides Five and Six");
 
+		// declaring this outside the block so prim can call it
+		Vertex<Integer> zero = new Vertex<Integer>(0);
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
-			Vertex<Integer> zero = new Vertex<Integer>(0);
 			Vertex<Integer> one = new Vertex<Integer>(1);
 			Vertex<Integer> two = new Vertex<Integer>(2);
 			Vertex<Integer> three = new Vertex<Integer>(3);
@@ -214,20 +216,22 @@ public class Main {
 			myGraph.addEdge(four, five, false, 3);
 		}
 		// prim version
+		myGraph.primTree(zero);
 
 		// kruskal's algorithm
+		myGraph.kruskalTree();
 
-		myGraph.displayAdjacencyMatrix();
 		myGraph.clear();
 	}
 
 	public static <T> void slideSeven(Graph<String> myGraph) {
 		System.out.println("Slide Seven");
 
+		Vertex<String> MinneapolisStPaul = new Vertex<String>("Minneapolis/St. Paul");
+
 		// add all the edges and vertices, but put them in a block so i can minimize it
 		if (true) {
 			Vertex<String> DesMoines = new Vertex<String>("Des Moines");
-			Vertex<String> MinneapolisStPaul = new Vertex<String>("Minneapolis/St. Paul");
 			Vertex<String> StLouis = new Vertex<String>("St. Louis");
 			Vertex<String> Madison = new Vertex<String>("Madison");
 			Vertex<String> Milwaukee = new Vertex<String>("Milwaukee");
@@ -256,9 +260,8 @@ public class Main {
 
 			myGraph.addEdge(Chicago, Detroit, false, 280);
 		}
-		// need to use kruskal's algorithm starting from Minneapolis
-
-		myGraph.displayAdjacencyMatrix();
+		// need to use prim algorithm starting from Minneapolis
+		myGraph.primTree(MinneapolisStPaul);
 		myGraph.clear();
 	}
 
@@ -296,6 +299,7 @@ public class Main {
 			myGraph.addEdge(one, three, true, 1);
 			myGraph.addEdge(one, four, true, 1);
 			myGraph.addEdge(one, five, true, 1);
+			myGraph.addEdge(one, six, true, 1);
 
 			myGraph.addEdge(two, four, true, 1);
 
@@ -317,8 +321,11 @@ public class Main {
 		 * 9. List the nodes of the graph in a breadth first topological ordering. Show
 		 * the steps using arrays predCount, topologicalOrder and a queue
 		 */
-
-		myGraph.displayAdjacencyMatrix();
+		ArrayList<Vertex<String>> temp = new ArrayList<Vertex<String>>();
+		temp = (ArrayList<Vertex<String>>) myGraph.topologicalSort().clone();
+		for (int i = 0; i < temp.size(); ++i) {
+			System.out.print(temp.get(i).toString() + (i == temp.size() - 1 ? "" : ", "));
+		}
 		myGraph.clear();
 	}
 
@@ -372,7 +379,11 @@ public class Main {
 		 * 10. List the nodes of the graph in a breadth first topological ordering.
 		 */
 
-		myGraph.displayAdjacencyMatrix();
+		ArrayList<Vertex<String>> temp = new ArrayList<Vertex<String>>();
+		temp = (ArrayList<Vertex<String>>) myGraph.topologicalSort().clone();
+		for (int i = 0; i < temp.size(); ++i) {
+			System.out.print(temp.get(i).toString() + (i == temp.size() - 1 ? "" : ", "));
+		}
 		myGraph.clear();
 	}
 }
